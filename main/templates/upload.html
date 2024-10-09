@@ -1,0 +1,38 @@
+<!-- converter/templates/converter/upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Word Converter</title>
+</head>
+<body>
+<center>
+    <h1>Upload PDF to Convert to Word</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if file_path %}
+        <p>PDF Uploaded: <a href="{{ file_path }}">{{ file_path }}</a></p>
+        <p>Download Word Document: <a href="{{ corrected_docx_path }}">{{ corrected_docx_path }}</a></p>
+        {% if grammar_issues %}
+            <h2>Grammar Issues Found:</h2>
+            <ul>
+                {% for issue in grammar_issues %}
+                    <li>{{ issue.message }} ({{ issue.context.text }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No grammar issues found!</p>
+        {% endif %}
+    {% endif %}
+    <div style="margin-top: 15px;">
+    <textarea style="width: 30%; height: 50%; box-sizing: border-box;">{{text}}</textarea>
+    <textarea style="width: 30%; height: 50%; box-sizing: border-box;">{{correct_text}}</textarea>
+</div>
+</center>
+</body>
+</html>
